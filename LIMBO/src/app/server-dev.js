@@ -1,8 +1,7 @@
-
 // BASE SETUP
 // =============================================================================
 
-// call the packages we need
+// packages
 import path from 'path'
 import express from 'express'
 import webpack from 'webpack'
@@ -11,8 +10,9 @@ import bodyParser from 'body-parser'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from '../../webpack.dev.config.js'
+
 const app = express(),
-            compiler = webpack(config)
+    compiler = webpack(config)
 
 
 // configure app
@@ -20,7 +20,7 @@ app.use(morgan('dev')); // log requests to the console
 
 app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath
-  }));
+}));
 
 app.use(webpackHotMiddleware(compiler))
 
@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 9090; // set our port
 
-// DATABASE SETUP
+// database setup
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://mobilizze:N842EkhQx37s8DQ@mobilizzecluster-shard-00-00-zeoup.mongodb.net:27017,mobilizzecluster-shard-00-01-zeoup.mongodb.net:27017,mobilizzecluster-shard-00-02-zeoup.mongodb.net:27017/TalkToUsOnWhatsApp?ssl=true&replicaSet=MobilizzeCluster-shard-0&authSource=admin&retryWrites=true'); // connect to our database
 
@@ -60,9 +60,9 @@ router.use(function (req, res, next) {
     next();
 });
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+// test route to make sure everything is working (accessed at GET http://localhost:8080/talktousonwhatsapp)
 router.get('/', function (req, res) {
-    res.sendFile(__dirname + './views/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 // on routes that end in /clients
@@ -87,7 +87,7 @@ router.route('/clients')
 
     })
 
-    // get all the clients (accessed at GET http://localhost:8080/api/clients)
+    // get all the clients (accessed at GET http://localhost:8080/talktousonwhatsapp/clients)
     .get(function (req, res) {
         Client.find(function (err, clients) {
             if (err)
@@ -97,9 +97,9 @@ router.route('/clients')
         });
     });
 
-// on routes that end in /clients/:client_id
+// on routes that end in /client/:client_id
 // ----------------------------------------------------
-router.route('/clients/:client_id')
+router.route('/client/:client_id')
 
     // get the client with that id
     .get(function (req, res) {
@@ -146,7 +146,7 @@ router.route('/clients/:client_id')
 
 
 // REGISTER OUR ROUTES -------------------------------
-app.use('/api', router);
+app.use('/talktousonwhatsapp', router);
 
 // START THE SERVER
 // =============================================================================
